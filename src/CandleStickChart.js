@@ -240,9 +240,9 @@ class CandleStickChart extends React.Component {
           />
           <CandlestickSeries
             opacity="1.0"
-            stroke={d => (d.close > d.open ? "#32CD32" : "#FF0000")}
-            wickStroke={d => (d.close > d.open ? "#32CD32" : "#FF0000")}
-            fill={d => (d.close > d.open ? "transparent" : "#FF0000")}
+            stroke={d => (d.close > d.open ? "#229954 " : "#FF0000")}
+            wickStroke={d => (d.close > d.open ? "#229954" : "#FF0000")}
+            fill={d => (d.close > d.open ? "#229954" : "#FF0000")}
           />
           <LineSeries
             yAccessor={ema20.accessor()}

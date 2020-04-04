@@ -70,7 +70,7 @@ class RootComponent extends React.Component {
       tickValue: 12.5,
       currentPrice: undefined,
       chartHeight: this.getWindowHeight() - 100,
-      startDate: "1/1/2019"
+      startDate: "30/12/2016"
     };
   }
 

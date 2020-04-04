@@ -9,16 +9,17 @@ function parseData(parse) {
     d.low = +d.low;
     d.close = +d.close;
     d.volume = 10*d.volume;
-
+    
+    // console.log(d)
     return d;
   };
 }
 
-const parseDate = timeParse("%Y-%m-%d %H:%M:%S");
+const parseDate = timeParse("%Y%m%d %H:%M:%S");
 
 export function getData() {
   const promiseMSFT = fetch(
-    "https://raw.githubusercontent.com/erwin-beckers/trading-simulator/master/data/es-5-min.csv"
+    "https://raw.githubusercontent.com/markthebault/trading-simulator/master/data/aapl-small.csv"
   )
     .then(response => response.text())
     .then(data => csvParse(data, parseData(parseDate)));
