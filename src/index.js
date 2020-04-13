@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import TopToolBar from "./TopToolBar";
 import Orders from "./Orders";
 import ChartComponent from "./Chart";
-import { getData } from "./utils";
+import { getServerData } from "./utils";
 import { TypeChooser } from "react-stockcharts/lib/helper";
 import { InteractiveYCoordinate } from "react-stockcharts/lib/interactive";
 import shortid from "shortid";

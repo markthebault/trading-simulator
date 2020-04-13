@@ -1,4 +1,6 @@
 import React from "react";
+import { getServerData } from "./utils";
+
 
 function getDisplayName(ChartComponent) {
   const name =
@@ -58,29 +60,33 @@ export default function updatingDataWrapper(ChartComponent) {
     }
 
     updateData(newData, offset) {
-      this.setState({
-        offset: offset,
-        data: newData
+      let data = getServerData(offset).then(data =>{
+        this.setState({
+          offset: offset,
+          data: data
+        });
+        this.props.onPriceChanged(this.state.currentPrice);
       });
-      this.props.onPriceChanged(this.state.currentPrice);
+
     }
 
     onKeyPress(e) {
+      let offset = this.state.offset
       const keyCode = e.which;
       switch (keyCode) {
         case 32:
-        case 39: // Right
-          let newOffset = this.state.offset + 1;
-          if (newOffset + LENGTH < this.props.data.length) {
-            let newData = this.getData(newOffset);
-            this.updateData(newData, newOffset);
-          }
+        case 39: // Left
+          offset = this.state.offset + 1
+          console.log(offset)
+          this.updateData([], offset );
           break;
 
-        case 37: // Left
+        case 37: // Right
+          offset = this.state.offset - 1
           if (this.state.offset > 0) {
-            let newData = this.getData(this.state.offset - 1);
-            this.updateData(newData, this.state.offset - 1);
+            console.log(offset)
+
+            this.updateData([], offset);
           }
           break;
       }

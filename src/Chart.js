@@ -1,11 +1,11 @@
 import React from "react";
 import Chart from "./CandleStickChartWithUpdatingData";
-import { getData } from "./utils";
+import { getServerData } from "./utils";
 import { TypeChooser } from "react-stockcharts/lib/helper";
 
 class ChartComponent extends React.Component {
   componentDidMount() {
-    getData().then(data => {
+    getServerData(0).then(data => {
       this.setState({ data });
     });
   }
