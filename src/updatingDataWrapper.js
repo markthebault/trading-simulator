@@ -1,5 +1,5 @@
 import React from "react";
-import { getServerData } from "./utils";
+import { getServerData, GRAPH_OFSET } from "./utils";
 
 
 function getDisplayName(ChartComponent) {
@@ -41,9 +41,12 @@ export default function updatingDataWrapper(ChartComponent) {
 
     updateData(offset) {
       getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
+        let currentPrice=data[data.length -1 - GRAPH_OFSET].close;
+
         this.setState({
           offset: offset,
-          data: data
+          data: data,
+          currentPrice: currentPrice
         });
         this.props.onPriceChanged(this.state.currentPrice);
       });

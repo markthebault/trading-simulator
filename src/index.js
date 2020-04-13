@@ -195,6 +195,8 @@ class RootComponent extends React.Component {
   }
 
   onBuyMarketOrder() {
+    console.log("hello")
+    console.log(this.state.currentPrice)
     if (!this.state.currentPrice) return;
     let now = new Date().getTime();
     var newOrder = this.createOrder(

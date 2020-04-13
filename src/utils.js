@@ -1,3 +1,5 @@
+export const GRAPH_OFSET=10
+
 function prepareServerData(d){
   let data = []
   d.forEach(line => {
@@ -18,7 +20,7 @@ function prepareServerData(d){
   d.forEach(line => {
     max = line.Time > max ? line.Time : max
   });
-  for(let i=1; i<=10;i++){
+  for(let i=1; i<=GRAPH_OFSET;i++){
     data.push({
       date: new Date( (max +i*2*60) * 1000 )
     })

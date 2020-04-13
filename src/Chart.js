@@ -1,13 +1,17 @@
 import React from "react";
 import Chart from "./CandleStickChartWithUpdatingData";
-import { getServerData } from "./utils";
+import { getServerData, GRAPH_OFSET } from "./utils";
 import { TypeChooser } from "react-stockcharts/lib/helper";
 
 class ChartComponent extends React.Component {
   componentDidMount() {
     getServerData(this.props.ticker, this.props.startDate, 0).then(data => {
+      let currentPrice=data[data.length -1 - GRAPH_OFSET].close;
+
       this.setState({ 
-        data: data
+        data: data,
+        currentPrice: currentPrice
+
        });
 
     });
