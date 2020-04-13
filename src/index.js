@@ -69,7 +69,7 @@ class RootComponent extends React.Component {
       capital: 10000,
       percentage: 0,
       tickSize: 1,
-      tickValue: 100,
+      tickValue: 1,
       currentPrice: undefined,
       chartHeight: this.getWindowHeight() - 100,
       startDate: "2019-01-01",
@@ -204,7 +204,7 @@ class RootComponent extends React.Component {
       now,
       "Long",
       this.state.currentPrice.date,
-      1,
+      100,
       this.state.currentPrice.close,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
@@ -228,7 +228,7 @@ class RootComponent extends React.Component {
       now,
       "Short",
       this.state.currentPrice.date,
-      1,
+      100,
       this.state.currentPrice.close,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
@@ -252,7 +252,7 @@ class RootComponent extends React.Component {
       now,
       "Long",
       this.state.currentPrice.date,
-      1,
+      100,
       this.state.currentPrice.close + this.state.currentPrice.close*LIM_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
@@ -276,7 +276,7 @@ class RootComponent extends React.Component {
       now,
       "Short",
       this.state.currentPrice.date,
-      1,
+      100,
       this.state.currentPrice.close - this.state.currentPrice.close*LIM_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
@@ -342,11 +342,11 @@ class RootComponent extends React.Component {
   calculateProfit(order, price) {
     if (order.type === "Long") {
       return (
-        ((price - order.open) / this.state.tickSize) * this.state.tickValue
+        ((price - order.open) / this.state.tickSize) * this.state.tickValue * order.size
       );
     } else {
       return (
-        ((order.open - price) / this.state.tickSize) * this.state.tickValue
+        ((order.open - price) / this.state.tickSize) * this.state.tickValue * order.size
       );
     }
   }
