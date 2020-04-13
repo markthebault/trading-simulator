@@ -17,11 +17,13 @@ import {
   EdgeIndicator,
   MouseCoordinateY
 } from "react-stockcharts/lib/coordinates";
+
 import { saveInteractiveNodes, getInteractiveNodes } from "./interactiveutils";
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
-import { ema, sma } from "react-stockcharts/lib/indicator";
+import { sma } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { InteractiveYCoordinate } from "react-stockcharts/lib/interactive";
+import { last } from "react-stockcharts/lib/utils";
 
 const mouseEdgeAppearance = {
   textFill: "#542605",
@@ -84,39 +86,36 @@ class CandleStickChart extends React.Component {
 	}
 
   render() {
-    const ema20 = ema()
+    const sma20 = sma()
       .id(0)
-      .options({ windowSize: 20 })
+      .options({ windowSize: 10 })
       .merge((d, c) => {
-        d.ema20 = c;
+        d.sma20 = c;
       })
-      .accessor(d => d.ema20);
+      .accessor(d => d.sma20);
 
-    const ema50 = ema()
+    const sma200 = sma()
       .id(2)
-      .options({ windowSize: 50 })
+      .options({ windowSize: 200 })
       .merge((d, c) => {
-        d.ema50 = c;
+        d.sma200 = c;
       })
-      .accessor(d => d.ema50);
+      .accessor(d => d.sma200);
 
-    const smaVolume70 = sma()
-      .id(3)
-      .options({ windowSize: 70, sourcePath: "volume" })
-      .merge((d, c) => {
-        d.smaVolume70 = c;
-      })
-      .accessor(d => d.smaVolume70);
 
     const { type, data: initialData, width, ratio } = this.props;
 
-    const calculatedData = ema20(ema50(smaVolume70(initialData)));
+    const calculatedData = sma20(sma200(initialData));
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
       d => d.date
     );
     const { data, xScale, xAccessor, displayXAccessor } = xScaleProvider(
       calculatedData
     );
+
+    const start = xAccessor(last(data));
+		const end = xAccessor(data[Math.max(0, data.length - 120)]);
+		const xExtents = [start, end];
 
     const margin = { left: 70, right: 70, top: 20, bottom: 30 };
     const height = this.props.chartHeight;
@@ -137,15 +136,16 @@ class CandleStickChart extends React.Component {
         ratio={ratio}
         margin={{ left: 70, right: 70, top: 20, bottom: 30 }}
         type={type}
-        seriesName={`MSFT_${this.state.suffix}`}
+        seriesName={`${this.state.ticker}_${this.state.suffix}`}
         data={data}
         xScale={xScale}
+        xExtents={xExtents}
         xAccessor={xAccessor}
         displayXAccessor={displayXAccessor}
       >
         <Chart
           id={2}
-          yExtents={[d => d.volume, smaVolume70.accessor()]}
+          yExtents={[d => d.volume]}
           height={100}
           origin={(w, h) => [0, h - 100]}
         >
@@ -153,8 +153,8 @@ class CandleStickChart extends React.Component {
             axisAt="left"
             orient="left"
             ticks={5}
-            tickStroke="#FFFFFF"
-            stroke="#FFFFFF"
+            // tickStroke="#FFFFFF"
+            // stroke="#FFFFFF"
             tickFormat={format(".2s")}
           />
 
@@ -162,16 +162,8 @@ class CandleStickChart extends React.Component {
             yAccessor={d => d.volume}
             fill={d => (d.close > d.open ? "#6BA583" : "#FF0000")}
           />
-          <AreaSeries
-            yAccessor={smaVolume70.accessor()}
-            stroke={smaVolume70.stroke()}
-            fill={smaVolume70.fill()}
-          />
+        
 
-          <CurrentCoordinate
-            yAccessor={smaVolume70.accessor()}
-            fill={smaVolume70.stroke()}
-          />
           <CurrentCoordinate yAccessor={d => d.volume} fill="#9B0A47" />
 
           <EdgeIndicator
@@ -190,35 +182,18 @@ class CandleStickChart extends React.Component {
             displayFormat={format(".4s")}
             fill="#0F0F0F"
           />
-          <EdgeIndicator
-            itemType="first"
-            orient="left"
-            edgeAt="left"
-            yAccessor={smaVolume70.accessor()}
-            displayFormat={format(".4s")}
-            fill={smaVolume70.fill()}
-          />
-          <EdgeIndicator
-            itemType="last"
-            orient="right"
-            edgeAt="right"
-            yAccessor={smaVolume70.accessor()}
-            displayFormat={format(".4s")}
-            fill={smaVolume70.fill()}
-          />
         </Chart>
         <Chart
           id={1}
           height={height - 50}
           yPan
-          yExtents={[d => [d.high, d.low], ema20.accessor(), ema50.accessor()]}
+          yExtents={[d => [d.high, d.low], sma20.accessor(), sma200.accessor()]}
           padding={{ top: 10, bottom: 20 }}
         >
-          <XAxis
+          {/* <XAxis
             axisAt="bottom"
             orient="bottom"
-            tickStroke="#FFFFFF"
-            stroke="#FFFFFF"
+
             opacity={0.5}
             {...xGrid}
             ticks={12}
@@ -227,63 +202,76 @@ class CandleStickChart extends React.Component {
             axisAt="right"
             orient="right"
             ticks={5}
-            tickStroke="#FFFFFF"
-            stroke="#FFFFFF"
+
             opacity={0.5}
             {...yGrid}
-          />
+          /> */}
           <MouseCoordinateY
             at="right"
             orient="right"
             displayFormat={format(".2f")}
             {...mouseEdgeAppearance}
           />
-          <CandlestickSeries
-            opacity="1.0"
-            stroke={d => (d.close > d.open ? "#229954 " : "#FF0000")}
-            wickStroke={d => (d.close > d.open ? "#229954" : "#FF0000")}
-            fill={d => (d.close > d.open ? "#229954" : "#FF0000")}
-          />
+          <CandlestickSeries />
+          {/* 
+          Indicators calculated by the chart
           <LineSeries
-            yAccessor={ema20.accessor()}
-            stroke={ema20.stroke()}
+            yAccessor={sma20.accessor()}
+            stroke={sma20.stroke()}
             highlightOnHover
           />
           <LineSeries
-            yAccessor={ema50.accessor()}
-            stroke={ema50.stroke()}
+            yAccessor={sma200.accessor()}
+            stroke={sma200.stroke()}
             highlightOnHover
           />
           <CurrentCoordinate
-            yAccessor={ema20.accessor()}
-            fill={ema20.stroke()}
+            yAccessor={sma20.accessor()}
+            fill={sma20.stroke()}
           />
           <CurrentCoordinate
-            yAccessor={ema50.accessor()}
-            fill={ema50.stroke()}
+            yAccessor={sma200.accessor()}
+            fill={sma200.stroke()}
           />
+          <EdgeIndicator
+            itemType="last"
+            orient="right"
+            edgeAt="right"
+            yAccessor={sma20.accessor()}
+            fill={sma20.fill()}
+          />
+          <EdgeIndicator
+            itemType="last"
+            orient="right"
+            edgeAt="right"
+            yAccessor={sma200.accessor()}
+            fill={sma200.fill()} */}
+          />
+
+
+          <LineSeries
+            yAccessor={d => d.mm20}
+            highlightOnHover
+            stroke="#4682B4"
+          />
+
+
+          <LineSeries
+            yAccessor={d => d.mm200}
+            highlightOnHover
+            stroke="#FF0000"
+          />
+
           <EdgeIndicator
             itemType="last"
             orient="right"
             edgeAt="right"
             yAccessor={d => d.close}
-            lineStroke="#ffffff"
             fill={d => (d.close > d.open ? "#6BA583" : "#DB0000")}
           />
-          <EdgeIndicator
-            itemType="last"
-            orient="right"
-            edgeAt="right"
-            yAccessor={ema20.accessor()}
-            fill={ema20.fill()}
-          />
-          <EdgeIndicator
-            itemType="last"
-            orient="right"
-            edgeAt="right"
-            yAccessor={ema50.accessor()}
-            fill={ema50.fill()}
-          />
+
+
+
           <InteractiveYCoordinate
             ref={this.saveInteractiveNodes("InteractiveYCoordinate", 1)}
             enabled={this.state.enableInteractiveObject}
@@ -295,7 +283,7 @@ class CandleStickChart extends React.Component {
 						onReset={this.handleReset.bind(this)}
 					/>
         </Chart>
-        <CrossHairCursor stroke="#FFFFFF" />
+        <CrossHairCursor />
       </ChartCanvas>
     );
   }

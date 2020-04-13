@@ -9,7 +9,7 @@ function getDisplayName(ChartComponent) {
 }
 
 export default function updatingDataWrapper(ChartComponent) {
-  const LENGTH = 300;
+  const LENGTH = 120;
 
   class UpdatingComponentHOC extends React.Component {
     constructor(props) {
@@ -20,21 +20,6 @@ export default function updatingDataWrapper(ChartComponent) {
       };
       this.onKeyPress = this.onKeyPress.bind(this);
     }
-
-    // componentDidUpdate(prevProps) {
-    //   if (this.props.startDate !== prevProps.startDate) {
-    //     var startDate = Date.parse(this.props.startDate);
-    //     for (let i = 0; i < this.props.data.length; ++i) {
-    //       let date = this.props.data[i].date;
-    //       if (date >= startDate) {
-    //         let offset = Math.max(0, i - LENGTH);
-    //         let newData = this.getData(offset);
-    //         this.updateData(newData, offset);
-    //         return;
-    //       }
-    //     }
-    //   }
-    // }
 
     componentDidMount() {
       document.addEventListener("keydown", this.onKeyPress);
@@ -63,15 +48,12 @@ export default function updatingDataWrapper(ChartComponent) {
         case 32:
         case 39: // Left
           offset = this.state.offset + 1
-          console.log(offset)
           this.updateData([], offset );
           break;
 
         case 37: // Right
           offset = this.state.offset - 1
           if (this.state.offset > 0) {
-            console.log(offset)
-
             this.updateData([], offset);
           }
           break;
