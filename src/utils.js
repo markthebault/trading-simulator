@@ -1,22 +1,3 @@
-import { tsvParse, csvParse } from "d3-dsv";
-import { timeParse } from "d3-time-format";
-
-
-
-function parseData(parse) {
-  return function(d) {
-    d.date = parse(d.time);
-    d.open = +d.open;
-    d.high = +d.high;
-    d.low = +d.low;
-    d.close = +d.close;
-    d.volume = 10*d.volume;
-    
-    // console.log(d)
-    return d;
-  };
-}
-
 function prepareServerData(d){
   let data = []
   d.forEach(line => {
@@ -46,7 +27,6 @@ function prepareServerData(d){
   return data;
 }
 
-const parseDate = timeParse("%Y%m%d %H:%M:%S");
 
 export function getServerData(ticker, date, position) {
   const promiseMSFT = fetch(

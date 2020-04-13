@@ -6,11 +6,10 @@ import { format } from "d3-format";
 import { ChartCanvas, Chart, ZoomButtons } from "react-stockcharts";
 import {
   BarSeries,
-  AreaSeries,
   CandlestickSeries,
   LineSeries
 } from "react-stockcharts/lib/series";
-import { XAxis, YAxis } from "react-stockcharts/lib/axes";
+import { YAxis } from "react-stockcharts/lib/axes";
 import {
   CrossHairCursor,
   CurrentCoordinate,
@@ -117,17 +116,17 @@ class CandleStickChart extends React.Component {
 		const end = xAccessor(data[Math.max(0, data.length - 120)]);
 		const xExtents = [start, end];
 
-    const margin = { left: 70, right: 70, top: 20, bottom: 30 };
+    // const margin = { left: 70, right: 70, top: 20, bottom: 30 };
     const height = this.props.chartHeight;
-    const gridHeight = height - margin.top - margin.bottom;
-    const gridWidth = width - margin.left - margin.right;
-    const showGrid = true;
-    const yGrid = showGrid
-      ? { innerTickSize: -1 * gridWidth, tickStrokeOpacity: 0.2 }
-      : {};
-    const xGrid = showGrid
-      ? { innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.2 }
-      : {};
+    // const gridHeight = height - margin.top - margin.bottom;
+    // const gridWidth = width - margin.left - margin.right;
+    // const showGrid = true;
+    // const yGrid = showGrid
+    //   ? { innerTickSize: -1 * gridWidth, tickStrokeOpacity: 0.2 }
+    //   : {};
+    // const xGrid = showGrid
+    //   ? { innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.2 }
+    //   : {};
 
     return (
       <ChartCanvas

@@ -3,8 +3,6 @@ import { render } from "react-dom";
 import TopToolBar from "./TopToolBar";
 import Orders from "./Orders";
 import ChartComponent from "./Chart";
-import { getServerData } from "./utils";
-import { TypeChooser } from "react-stockcharts/lib/helper";
 import { InteractiveYCoordinate } from "react-stockcharts/lib/interactive";
 import shortid from "shortid";
 import SplitterLayout from "react-splitter-layout";
@@ -350,7 +348,7 @@ class RootComponent extends React.Component {
   }
 
   closeOrdersTPorSL(price) {
-    if (this.state.orders.length == 0) {
+    if (this.state.orders.length === 0) {
       return;
     }
 
@@ -362,7 +360,7 @@ class RootComponent extends React.Component {
         if (order.type === "Long") {
           if (price.high >= order.open) {
             order.isopened = true;
-            order.date = price.date,
+            order.date = price.date;
             order.profitloss = this.calculateProfit(order, order.stoploss);
             chartItemsToRemove.push(order.chartOpen);
             order.chartOpen = null;
@@ -370,7 +368,7 @@ class RootComponent extends React.Component {
         } else {
           if (price.low <= order.open) {
             order.isopened = true;
-            order.date = price.date,
+            order.date = price.date;
             order.profitloss = this.calculateProfit(order, order.stoploss);
             chartItemsToRemove.push(order.chartOpen);
             order.chartOpen = null;
@@ -465,7 +463,7 @@ class RootComponent extends React.Component {
   }
 
   onOrdersTableHeightChanged(height) {
-    var height = this.getWindowHeight() - (height + 70);
+    height = this.getWindowHeight() - (height + 70);
     var self = this;
     setTimeout(() => {
       self.setState({ chartHeight: height });

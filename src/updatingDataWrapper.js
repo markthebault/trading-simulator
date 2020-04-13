@@ -9,7 +9,6 @@ function getDisplayName(ChartComponent) {
 }
 
 export default function updatingDataWrapper(ChartComponent) {
-  const LENGTH = 120;
 
   class UpdatingComponentHOC extends React.Component {
     constructor(props) {
@@ -30,8 +29,8 @@ export default function updatingDataWrapper(ChartComponent) {
       document.removeEventListener("keydown", this.onKeyPress);
     }
 
-    updateData(newData, offset) {
-      let data = getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
+    updateData(offset) {
+      getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
         this.setState({
           offset: offset,
           data: data
@@ -48,14 +47,16 @@ export default function updatingDataWrapper(ChartComponent) {
         case 32:
         case 39: // Left
           offset = this.state.offset + 1
-          this.updateData([], offset );
+          this.updateData(offset );
           break;
 
         case 37: // Right
           offset = this.state.offset - 1
           if (this.state.offset > 0) {
-            this.updateData([], offset);
+            this.updateData(offset);
           }
+          break;
+        default:
           break;
       }
     }

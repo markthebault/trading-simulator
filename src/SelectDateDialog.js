@@ -11,7 +11,7 @@ class SelectDateDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "1/1/2019"
+      date: "2019-01-01"
     };
   }
 
@@ -44,7 +44,7 @@ class SelectDateDialog extends React.Component {
               margin="dense"
               id="date"
               type="date"
-              defaultValue="2019-01-01"
+              defaultValue={this.state.date}
               onChange={this.handleChange.bind(this)}
               fullWidth
             />
