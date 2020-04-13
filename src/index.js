@@ -8,6 +8,7 @@ import shortid from "shortid";
 import SplitterLayout from "react-splitter-layout";
 import "react-splitter-layout/lib/index.css";
 
+
 const sell = {
   ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
   stroke: "white",
@@ -471,9 +472,9 @@ class RootComponent extends React.Component {
   }
 
   onGotoDate(date) {
-    this.setState({
+    this.setState({ 
       startDate: date
-    });
+      });
   }
 
   render() {

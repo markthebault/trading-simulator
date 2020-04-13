@@ -20,6 +20,16 @@ export default function updatingDataWrapper(ChartComponent) {
       this.onKeyPress = this.onKeyPress.bind(this);
     }
 
+    componentDidUpdate(prevProps){
+      if (this.props.startDate !== prevProps.startDate) {
+        getServerData(this.props.ticker, this.props.startDate, 0).then(data => {
+          this.setState({ 
+            data: data
+           });
+          });
+      }
+    }
+
     componentDidMount() {
       document.addEventListener("keydown", this.onKeyPress);
     }
