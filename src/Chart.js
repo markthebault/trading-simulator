@@ -5,8 +5,11 @@ import { TypeChooser } from "react-stockcharts/lib/helper";
 
 class ChartComponent extends React.Component {
   componentDidMount() {
-    getServerData(0).then(data => {
-      this.setState({ data });
+    getServerData(this.props.ticker, this.props.startDate, 0).then(data => {
+      this.setState({ 
+        data: data
+       });
+
     });
   }
   render() {
@@ -25,6 +28,7 @@ class ChartComponent extends React.Component {
             data={this.state.data}
             chartHeight={this.props.chartHeight}
             startDate={this.props.startDate}
+            ticker={this.props.ticker}
           />
         )}
       </TypeChooser>

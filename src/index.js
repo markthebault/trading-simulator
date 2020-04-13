@@ -70,7 +70,8 @@ class RootComponent extends React.Component {
       tickValue: 12.5,
       currentPrice: undefined,
       chartHeight: this.getWindowHeight() - 100,
-      startDate: "30/12/2016"
+      startDate: "2019-01-01",
+      ticker: "AAPL"
     };
   }
 
@@ -502,6 +503,7 @@ class RootComponent extends React.Component {
             onPriceChanged={this.onPriceChanged.bind(this)}
             chartHeight={this.state.chartHeight}
             startDate={this.state.startDate}
+            ticker={this.state.ticker}
           />
           <Orders
             orders={this.state.orders}

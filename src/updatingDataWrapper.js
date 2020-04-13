@@ -16,25 +16,25 @@ export default function updatingDataWrapper(ChartComponent) {
       super(props);
       this.state = {
         offset: 0,
-        data: this.getData(0)
+        data: this.props.data
       };
       this.onKeyPress = this.onKeyPress.bind(this);
     }
 
-    componentDidUpdate(prevProps) {
-      if (this.props.startDate !== prevProps.startDate) {
-        var startDate = Date.parse(this.props.startDate);
-        for (let i = 0; i < this.props.data.length; ++i) {
-          let date = this.props.data[i].date;
-          if (date >= startDate) {
-            let offset = Math.max(0, i - LENGTH);
-            let newData = this.getData(offset);
-            this.updateData(newData, offset);
-            return;
-          }
-        }
-      }
-    }
+    // componentDidUpdate(prevProps) {
+    //   if (this.props.startDate !== prevProps.startDate) {
+    //     var startDate = Date.parse(this.props.startDate);
+    //     for (let i = 0; i < this.props.data.length; ++i) {
+    //       let date = this.props.data[i].date;
+    //       if (date >= startDate) {
+    //         let offset = Math.max(0, i - LENGTH);
+    //         let newData = this.getData(offset);
+    //         this.updateData(newData, offset);
+    //         return;
+    //       }
+    //     }
+    //   }
+    // }
 
     componentDidMount() {
       document.addEventListener("keydown", this.onKeyPress);
@@ -45,22 +45,8 @@ export default function updatingDataWrapper(ChartComponent) {
       document.removeEventListener("keydown", this.onKeyPress);
     }
 
-    getData(offset) {
-      let newData = this.props.data.slice(offset + 1, offset + 1 + LENGTH);
-      let currentPrice=newData[newData.length - 1];
-      this.setState({
-        currentPrice:currentPrice
-      });
-      for (let i = 0; i < 20; ++i) {
-        newData.push({
-          date: currentPrice.date
-        });
-      }
-      return newData;
-    }
-
     updateData(newData, offset) {
-      let data = getServerData(offset).then(data =>{
+      let data = getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
         this.setState({
           offset: offset,
           data: data

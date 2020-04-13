@@ -11,7 +11,7 @@ class SelectDateDialog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "1/1/2017"
+      date: "1/1/2019"
     };
   }
 
