@@ -9,34 +9,37 @@ import SplitterLayout from "react-splitter-layout";
 import "react-splitter-layout/lib/index.css";
 
 
+const LIM_DIST = 0.002
+const SL_T_DIST = 0.005
+
 const sell = {
   ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
-  stroke: "white",
-  textFill: "white",
+  stroke: "black",
+  textFill: "black",
   bgFill: "red",
   text: "1 Sell STP",
   edge: {
     ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate.edge,
-    stroke: "white",
-    textFill: "white",
+    stroke: "black",
+    textFill: "black",
     fill: "red"
   }
 };
 const buy = {
   ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
-  stroke: "white",
+  stroke: "black",
   bgFill: "#32CD32",
   textFill: "black",
   text: "1 Sell LMT",
   edge: {
     ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate.edge,
-    stroke: "white",
+    stroke: "black",
     fill: "#32CD32"
   }
 };
 const open = {
   ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate,
-  stroke: "white",
+  stroke: "black",
   textFill: "32CD32",
   text: "1 (0.00)",
   bgFill: "transparent",
@@ -51,7 +54,7 @@ const open = {
   },
   edge: {
     ...InteractiveYCoordinate.defaultProps.defaultPriceCoordinate.edge,
-    stroke: "white"
+    stroke: "black"
   }
 };
 
@@ -65,8 +68,8 @@ class RootComponent extends React.Component {
       initialCapital: 10000,
       capital: 10000,
       percentage: 0,
-      tickSize: 0.25,
-      tickValue: 12.5,
+      tickSize: 1,
+      tickValue: 100,
       currentPrice: undefined,
       chartHeight: this.getWindowHeight() - 100,
       startDate: "2019-01-01",
@@ -195,8 +198,6 @@ class RootComponent extends React.Component {
   }
 
   onBuyMarketOrder() {
-    console.log("hello")
-    console.log(this.state.currentPrice)
     if (!this.state.currentPrice) return;
     let now = new Date().getTime();
     var newOrder = this.createOrder(
@@ -205,8 +206,8 @@ class RootComponent extends React.Component {
       this.state.currentPrice.date,
       1,
       this.state.currentPrice.close,
-      this.state.currentPrice.close - 4,
-      this.state.currentPrice.close + 4,
+      this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
+      this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       0,
       true
     );
@@ -229,8 +230,8 @@ class RootComponent extends React.Component {
       this.state.currentPrice.date,
       1,
       this.state.currentPrice.close,
-      this.state.currentPrice.close + 4,
-      this.state.currentPrice.close - 4,
+      this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
+      this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       0,
       true
     );
@@ -252,9 +253,9 @@ class RootComponent extends React.Component {
       "Long",
       this.state.currentPrice.date,
       1,
-      this.state.currentPrice.close + 2,
-      this.state.currentPrice.close - 2,
-      this.state.currentPrice.close + 6,
+      this.state.currentPrice.close + this.state.currentPrice.close*LIM_DIST,
+      this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
+      this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       0,
       false
     );
@@ -276,9 +277,9 @@ class RootComponent extends React.Component {
       "Short",
       this.state.currentPrice.date,
       1,
-      this.state.currentPrice.close - 2,
-      this.state.currentPrice.close + 2,
-      this.state.currentPrice.close - 6,
+      this.state.currentPrice.close - this.state.currentPrice.close*LIM_DIST,
+      this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
+      this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       0,
       false
     );

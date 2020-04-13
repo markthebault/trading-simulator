@@ -129,6 +129,7 @@ class Orders extends React.Component {
                     <StyledTableCell align="center">
                       {row.open.toFixed(2)}
                     </StyledTableCell>
+                    
                     <StyledTableCell align="center">
                       {row.stoploss.toFixed(2)}
                     </StyledTableCell>

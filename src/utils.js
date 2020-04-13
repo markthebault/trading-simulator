@@ -33,7 +33,7 @@ function prepareServerData(d){
 export function getServerData(ticker, date, position) {
   const promiseMSFT = fetch(
     // "https://raw.githubusercontent.com/markthebault/trading-simulator/master/data/aapl-small.csv"
-    "http://localhost:8080/bars?ticker="+ticker+"&day="+date+"&bar_id="+position+"&length=550"
+    "http://localhost:8080/bars?ticker="+ticker+"&day="+date+"&bar_id="+position+"&length=450"
   )
     .then(response => response.text())
     // .then(data => csvParse(data, parseData(parseDate)))

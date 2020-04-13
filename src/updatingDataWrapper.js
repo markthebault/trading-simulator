@@ -41,7 +41,7 @@ export default function updatingDataWrapper(ChartComponent) {
 
     updateData(offset) {
       getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
-        let currentPrice=data[data.length -1 - GRAPH_OFSET].close;
+        let currentPrice=data[data.length -1 - GRAPH_OFSET];
 
         this.setState({
           offset: offset,

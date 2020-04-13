@@ -9,7 +9,6 @@ import {
   CandlestickSeries,
   LineSeries
 } from "react-stockcharts/lib/series";
-import { YAxis } from "react-stockcharts/lib/axes";
 import {
   CrossHairCursor,
   CurrentCoordinate,
@@ -17,12 +16,15 @@ import {
   MouseCoordinateY
 } from "react-stockcharts/lib/coordinates";
 
+import { XAxis, YAxis } from "react-stockcharts/lib/axes";
+
+
 import { saveInteractiveNodes, getInteractiveNodes } from "./interactiveutils";
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
 import { sma } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { InteractiveYCoordinate } from "react-stockcharts/lib/interactive";
-import { last } from "react-stockcharts/lib/utils";
+// import { last } from "react-stockcharts/lib/utils";
 
 const mouseEdgeAppearance = {
   textFill: "#542605",
@@ -34,7 +36,7 @@ const mouseEdgeAppearance = {
 };
 
 function round(number) {
-  return Math.round(number / 0.25) * 0.25;
+  return Math.round(number / 0.01) * 0.01;
 }
 
 class CandleStickChart extends React.Component {
@@ -112,9 +114,9 @@ class CandleStickChart extends React.Component {
       calculatedData
     );
 
-    const start = xAccessor(last(data));
-		const end = xAccessor(data[Math.max(0, data.length - 120)]);
-		const xExtents = [start, end];
+    // const start = xAccessor(last(data));
+		// const end = xAccessor(data[Math.max(0, data.length - 120)]);
+		// const xExtents = [start, end];
 
     // const margin = { left: 70, right: 70, top: 20, bottom: 30 };
     const height = this.props.chartHeight;
@@ -138,7 +140,7 @@ class CandleStickChart extends React.Component {
         seriesName={`${this.state.ticker}_${this.state.suffix}`}
         data={data}
         xScale={xScale}
-        xExtents={xExtents}
+        // xExtents={xExtents}
         xAccessor={xAccessor}
         displayXAccessor={displayXAccessor}
       >
@@ -189,12 +191,12 @@ class CandleStickChart extends React.Component {
           yExtents={[d => [d.high, d.low], sma20.accessor(), sma200.accessor()]}
           padding={{ top: 10, bottom: 20 }}
         >
-          {/* <XAxis
+          <XAxis
             axisAt="bottom"
             orient="bottom"
 
-            opacity={0.5}
-            {...xGrid}
+            opacity={0.1}
+            // {...xGrid}
             ticks={12}
           />
           <YAxis
@@ -202,9 +204,9 @@ class CandleStickChart extends React.Component {
             orient="right"
             ticks={5}
 
-            opacity={0.5}
-            {...yGrid}
-          /> */}
+            opacity={0.2}
+            // {...yGrid}
+          />
           <MouseCoordinateY
             at="right"
             orient="right"
