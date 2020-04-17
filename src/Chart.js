@@ -5,7 +5,7 @@ import { TypeChooser } from "react-stockcharts/lib/helper";
 
 class ChartComponent extends React.Component {
   componentDidMount() {
-    getServerData(this.props.ticker, this.props.startDate, 0).then(data => {
+    getServerData(this.props.ticker, this.props.tf, this.props.startDate, 0).then(data => {
       let currentPrice=data[data.length -1 - GRAPH_OFSET].close;
 
       this.setState({ 
@@ -33,6 +33,7 @@ class ChartComponent extends React.Component {
             chartHeight={this.props.chartHeight}
             startDate={this.props.startDate}
             ticker={this.props.ticker}
+            tf={this.props.tf}
           />
         )}
       </TypeChooser>

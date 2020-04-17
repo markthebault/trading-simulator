@@ -21,12 +21,16 @@ export default function updatingDataWrapper(ChartComponent) {
     }
 
     componentDidUpdate(prevProps){
-      if (this.props.startDate !== prevProps.startDate) {
-        getServerData(this.props.ticker, this.props.startDate, 0).then(data => {
+      let needToRefresh = this.props.startDate !== prevProps.startDate 
+                          || this.props.ticker !== prevProps.ticker
+                          || this.props.tf !== prevProps.tf
+      
+      if (needToRefresh) {
+        getServerData(this.props.ticker, this.props.tf, this.props.startDate, this.state.offset).then(data => {
           this.setState({ 
             data: data
            });
-          });
+          }); 
       }
     }
 
@@ -40,7 +44,7 @@ export default function updatingDataWrapper(ChartComponent) {
     }
 
     updateData(offset) {
-      getServerData(this.props.ticker, this.props.startDate, offset).then(data =>{
+      getServerData(this.props.ticker, this.props.tf, this.props.startDate, offset).then(data =>{
         let currentPrice=data[data.length -1 - GRAPH_OFSET];
 
         this.setState({

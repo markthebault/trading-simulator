@@ -73,7 +73,9 @@ class RootComponent extends React.Component {
       currentPrice: undefined,
       chartHeight: this.getWindowHeight() - 100,
       startDate: "2019-01-01",
-      ticker: "AAPL"
+      ticker: "AAPL",
+      tf: "2min",
+      size: 100
     };
   }
 
@@ -204,7 +206,7 @@ class RootComponent extends React.Component {
       now,
       "Long",
       this.state.currentPrice.date,
-      100,
+      this.state.size,
       this.state.currentPrice.close,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
@@ -228,7 +230,7 @@ class RootComponent extends React.Component {
       now,
       "Short",
       this.state.currentPrice.date,
-      100,
+      this.state.size,
       this.state.currentPrice.close,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
@@ -252,7 +254,7 @@ class RootComponent extends React.Component {
       now,
       "Long",
       this.state.currentPrice.date,
-      100,
+      this.state.size,
       this.state.currentPrice.close + this.state.currentPrice.close*LIM_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
@@ -276,7 +278,7 @@ class RootComponent extends React.Component {
       now,
       "Short",
       this.state.currentPrice.date,
-      100,
+      this.state.size,
       this.state.currentPrice.close - this.state.currentPrice.close*LIM_DIST,
       this.state.currentPrice.close + this.state.currentPrice.close*SL_T_DIST,
       this.state.currentPrice.close - this.state.currentPrice.close*SL_T_DIST,
@@ -480,10 +482,31 @@ class RootComponent extends React.Component {
       });
   }
 
+  onChangeTf(event) {
+    this.setState({ 
+      tf: event.target.value
+      });
+  }
+
+  onChangeTicker(event) {
+    this.setState({ 
+      ticker: event.target.value
+      });
+  }
+
+  onChangeSize(event) {
+    this.setState({ 
+      size: event.target.value
+      });
+  }
+
   render() {
     return (
       <div>
         <TopToolBar
+          onChangeTicker={this.onChangeTicker.bind(this)}
+          onChangeTf={this.onChangeTf.bind(this)}
+          onChangeSize={this.onChangeSize.bind(this)}
           onBuyMarket={this.onBuyMarketOrder.bind(this)}
           onSellMarket={this.onSellMarketOrder.bind(this)}
           onBuyLimit={this.onBuyLimitOrder.bind(this)}
@@ -491,13 +514,18 @@ class RootComponent extends React.Component {
           onGotoDate={this.onGotoDate.bind(this)}
           capital={this.state.capital}
           percentage={this.state.percentage}
+          timeframe={this.state.tf}
+          ticker={this.state.ticker}
+          size={this.state.size}
         />
         <SplitterLayout
           vertical={true}
           percentage={false}
-          secondaryInitialSize={230}
+          secondaryInitialSize={330}
           onSecondaryPaneSizeChange={this.onOrdersTableHeightChanged.bind(this)}
         >
+
+        <SplitterLayout>
           <ChartComponent
             orderChartItems={this.state.orderChartItems}
             onClose={this.onCloseOrder.bind(this)}
@@ -506,7 +534,22 @@ class RootComponent extends React.Component {
             chartHeight={this.state.chartHeight}
             startDate={this.state.startDate}
             ticker={this.state.ticker}
+            tf={this.state.tf}
           />
+          <ChartComponent
+            orderChartItems={this.state.orderChartItems}
+            onClose={this.onCloseOrder.bind(this)}
+            onChanged={this.onOrderChanged.bind(this)}
+            onPriceChanged={this.onPriceChanged.bind(this)}
+            chartHeight={this.state.chartHeight}
+            startDate={this.state.startDate}
+            ticker={this.state.ticker}
+            tf="15min"
+          />
+        </SplitterLayout>
+
+
+
           <Orders
             orders={this.state.orders}
             history={this.state.history}
