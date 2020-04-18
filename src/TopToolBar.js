@@ -107,6 +107,7 @@ class TopToolBar extends React.Component {
                 <MenuItem value="1min" >1 Minute</MenuItem>
                 <MenuItem value="2min">2 Minutes</MenuItem>
                 <MenuItem value="15min">15 Minutes</MenuItem>
+                <MenuItem value="60min">60 Minutes</MenuItem>
               </Select>
 
               <Select id="size" value={this.props.size} onChange={this.props.onChangeSize}>
